@@ -1,0 +1,29 @@
+    {% if configuration_system.processes is defined %}
+    processes {
+        {% if configuration_system.processes.dhcp_service is defined %}
+        dhcp-service {
+            {% if configuration_system.processes.dhcp_service.traceoptions is defined %}
+            traceoptions {
+                {% if configuration_system.processes.dhcp_service.traceoptions.file is defined %}
+                file {{ configuration_system.processes.dhcp_service.traceoptions.file.filename }} size {{ configuration_system.processes.dhcp_service.traceoptions.file.size }};
+                {% endif %}
+                {% if configuration_system.processes.dhcp_service.traceoptions.level is defined %}
+                level {{ configuration_system.processes.dhcp_service.traceoptions.level }};
+                {% endif %}
+                {% if configuration_system.processes.dhcp_service.traceoptions.flag is defined %}
+                flag {{ configuration_system.processes.dhcp_service.traceoptions.flag.name }};
+                {% endif %}
+            }
+            {% endif %}
+        }
+        {% endif %}
+        {% if configuration_system.processes.app_engine_virtual_machine_management_service is defined %}
+        app-engine-virtual-machine-management-service {
+            traceoptions {
+                level notice;
+                flag all;
+            }
+        }
+        {% endif %}
+    }
+    {% endif %}

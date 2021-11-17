@@ -1,0 +1,57 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# tacacs                                                                              #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.tacplus_server is defined %}
+    {% if configuration_system.tacplus_server['@inactive'] is defined %}
+    inactive: tacplus-server {
+    {% else %}
+    tacplus-server {
+    {% endif %}
+        {% if configuration_system.tacplus_server is not mapping and configuration_system.tacplus_server is not string %}
+        {% for each in configuration_system.tacplus_server %}
+        {% if each['@inactive'] is defined %}
+        inactive: {{ each.name }} {
+        {% else %}
+        {{ each.name }} {
+        {% endif %}
+            {% if each.timeout is defined %}
+            timeout {{ each.timeout }};
+            {% endif %}
+            {% if each.single_connection is defined %}
+            single-connection;
+            {% endif %}
+            {% if each.source_address is defined %}
+            source-address {{ each.source_address }};
+            {% endif %}
+        }
+        {% endfor %}
+        {% else %}
+        {% if configuration_system.tacplus_server.name['@inactive'] %}
+        inactive: {{ configuration_system.tacplus_server.name }} {
+        {% else %}
+        {{ configuration_system.tacplus_server.name }} {
+        {% endif %}
+            {% if configuration_system.tacplus_server.timeout is defined %}
+            timeout {{ configuration_system.tacplus_server.timeout }};
+            {% endif %}
+            {% if configuration_system.tacplus_server.single_connection is defined %}
+            single-connection;
+            {% endif %}
+            {% if configuration_system.tacplus_server.source_address is defined %}
+            source-address {{ configuration_system.tacplus_servereach.source_address }};
+            {% endif %}
+        }
+        {% endif %}
+    }
+    {% endif %}
+    {% if configuration_system.tacplus_options is defined %}
+    {% if configuration_system.tacplus_options['@inactive'] is defined %}
+    inactive: tacplus-options {
+    {% else %}
+    tacplus-options {
+    {% endif %}
+        {% if configuration_system.tacplus_options.exclude_cmd_attribute is defined %}
+        exclude-cmd-attribute;
+        {% endif %}
+    }
+    {% endif %}

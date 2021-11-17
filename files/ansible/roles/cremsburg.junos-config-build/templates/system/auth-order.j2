@@ -1,0 +1,10 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# auth order                                                                          #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.authentication_order is defined %}
+    {% if configuration_system.authentication_order is not mapping and configuration_system.authentication_order is not string  %}
+    authentication-order [ {{ configuration_system.authentication_order|join(' ') }} ];
+    {% else %}
+    authentication-order {{ configuration_system.authentication_order }};
+    {% endif %}
+    {% endif %}

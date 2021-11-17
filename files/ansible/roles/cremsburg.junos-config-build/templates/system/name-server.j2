@@ -1,0 +1,14 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# name server                                                                         #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.name_server is defined %}
+    name-server {
+        {% if configuration_system.name_server is not mapping and configuration_system.name_server is not string %}
+        {% for each in configuration_system.name_server %}
+        {{ each.name }};
+        {% endfor %}
+        {% else %}
+        {{ configuration_system.name_server.name }};
+        {% endif %}
+    }
+    {% endif %}

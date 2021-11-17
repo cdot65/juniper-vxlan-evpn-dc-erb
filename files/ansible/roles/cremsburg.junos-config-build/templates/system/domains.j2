@@ -1,0 +1,9 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# domains                                                                             #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.domain_name is defined %}
+    domain-name {{ configuration_system.domain_name }};
+    {% endif %}
+    {% if configuration_system.domain_search is defined %}
+    domain-search {{ configuration_system.domain_search }};
+    {% endif %}

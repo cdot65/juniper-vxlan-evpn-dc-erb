@@ -1,0 +1,11 @@
+    {% if configuration_system.extensions is defined %}
+    extensions {
+        providers {
+            {% for each in configuration_system.extensions.providers %}
+            {{ each.name }} {
+                license-type {{ each.license_type.name }} deployment-scope {{ each.license_type.deployment_scope }};
+            }
+            {% endfor %}
+        }
+    }
+    {% endif %}

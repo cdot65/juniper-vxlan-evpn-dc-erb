@@ -1,0 +1,16 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# arp config                                                                          #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.arp is defined %}
+    arp {
+        {% if configuration_system.arp.aging_timer is defined %}
+        aging-timer {{ configuration_system.arp.aging_timer }};
+        {% endif %}
+        {% if configuration_system.arp.gratuitous_arp_on_ifup is defined %}
+        purging;
+        {% endif %}
+        {% if configuration_system.arp.purging is defined %}
+        gratuitous-arp-on-ifup;
+        {% endif %}
+    }
+    {% endif %}

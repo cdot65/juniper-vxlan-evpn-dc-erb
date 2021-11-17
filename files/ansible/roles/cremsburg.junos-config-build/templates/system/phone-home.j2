@@ -1,0 +1,10 @@
+    {% if configuration_system.phone_home is defined %}
+    phone-home {
+        {% if configuration_system.phone_home.rfc_compliant is defined %}
+        server {{ configuration_system.phone_home.server }};
+        {% endif %}
+        {% if configuration_system.phone_home.rfc_compliant is defined %}
+        rfc-compliant;
+        {% endif %}
+    }
+    {% endif %}

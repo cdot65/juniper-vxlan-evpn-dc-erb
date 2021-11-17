@@ -1,0 +1,16 @@
+    {% if configuration_system.ntp is defined %}
+    ntp {
+        {% if configuration_system.ntp.server is defined %}
+        {% if configuration_system.ntp.server is iterable and configuration_system.ntp.server is not mapping %}
+        {% for each in configuration_system.ntp.server %}
+        server {{ each.name }};
+        {% endfor %}
+        {% else %}
+        server {{ configuration_system.ntp.server.name }};
+        {% endif %}
+        {% endif %}
+        {% if configuration_system.ntp.source_address is defined %}
+        source-address {{ configuration_system.ntp.source_address.name }};
+        {% endif %}
+    }
+    {% endif %}

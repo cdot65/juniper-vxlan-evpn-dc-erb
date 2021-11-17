@@ -1,0 +1,156 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# configuration_system.service                                                        #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.services is defined %}
+    services {
+        {% if configuration_system.services.ftp is defined %}
+        ftp;
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# ssh                                                                                 #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.ssh is defined %}
+        ssh {
+            {% if configuration_system.services.ssh.root_login is defined %}
+            root-login allow;
+            {% endif %}
+            {% if configuration_system.services.ssh.protocol_version is defined %}
+            protocol-version {{ configuration_system.services.ssh.protocol_version }};
+            {% endif %}
+            {% if configuration_system.services.ssh.max_sessions_per_connection is defined %}
+            max-sessions-per-connection {{ configuration_system.services.ssh.max_sessions_per_connection }};
+            {% endif %}
+            {% if configuration_system.services.ssh.connection_limit is defined %}
+            connection-limit {{ configuration_system.services.ssh.connection_limit }};
+            {% endif %}
+            {% if configuration_system.services.ssh.rate_limit is defined %}
+            rate-limit {{ configuration_system.services.ssh.rate_limit }};
+            {% endif %}
+        }
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# extension-service                                                                   #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.extension_service is defined %}
+        {% set extension_service = configuration_system.services.extension_service %}
+        extension-service {
+            {% if extension_service.request_response is defined %}
+            request-response {
+                {% if extension_service.request_response.grpc is defined %}
+                grpc {
+                    {% if extension_service.request_response.grpc.clear_text is defined %}
+                    clear-text;
+                    {% endif %}
+                    {% if extension_service.request_response.grpc.max_connections is defined %}
+                    max-connections {{ extension_service.request_response.grpc.max_connections }};
+                    {% endif %}
+                    {% if extension_service.request_response.grpc.skip_authentication is defined %}
+                    skip-authentication;
+                    {% endif %}
+                }
+                {% endif %}
+            }
+            {% endif %}
+            {% if extension_service.notification is defined %}
+            notification {
+                {% if extension_service.notification.allow_clients is defined %}
+                allow-clients {
+                    address {{ extension_service.notification.allow_clients.address }};
+                }
+                {% endif %}
+            }
+            {% endif %}
+        }
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# netconf                                                                             #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.netconf is defined %}
+        netconf {
+            {% if configuration_system.services.netconf.ssh is defined %}
+            ssh;
+            {% endif %}
+        }
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# outbound_ssh                                                                                #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.outbound_ssh is defined %}
+        outbound-ssh {
+            {% if configuration_system.services.outbound_ssh.client is defined %}
+            {% for each in configuration_system.services.outbound_ssh.client %}
+            client {{ each.name }} {
+                device-id {{ each.device_id }};
+                secret {{ each.secret }};
+                keep-alive {
+                    retry {{ each.keep_alive.retry }};
+                    timeout {{ each.keep_alive.timeout }};
+                }
+                services {{ each.services }};
+                {% for server in each.servers %}
+                {{ server.name }} {
+                    port {{ server.port }};
+                    retry {{ server.retry }};
+                    timeout {{ server.timeout }};
+                }
+                {% endfor %}
+            }
+            {% endfor %}
+            {% endif %}
+        }
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# rest                                                                                #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.rest is defined %}
+        rest {
+            {% if configuration_system.services.rest.http is defined %}
+            http {
+                {% if configuration_system.services.rest.http.port is defined %}
+                port {{ configuration_system.services.rest.http.port }};
+                {% endif %}
+                {% if configuration_system.services.rest.http.addresses is defined %}
+                addresses {{ configuration_system.services.rest.http.addresses }};
+                {% endif %}
+            }
+            {% endif %}
+            {% if configuration_system.services.rest.enable_explorer is defined %}
+            enable-explorer;
+            {% endif %}
+        }
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# dhcp-local-server                                                                   #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.dhcp_local_server is defined %}
+        dhcp-local-server {
+            {% if configuration_system.services.dhcp_local_server.group is defined %}
+            {% for each in configuration_system.services.dhcp_local_server.group %}
+            group {{ each.name }} {
+                {% for iface in each.interface %}
+                interface {{ iface.name }};
+                {% endfor %}
+            }
+            {% endfor %}
+            {% endif %}
+        }
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# web-management                                                                      #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.services.web_management is defined %}
+        web-management {
+            {% if configuration_system.services.web_management.http is defined %}
+            http {
+                {% if configuration_system.services.web_management.http.interface is defined %}
+                interface {{ configuration_system.services.web_management.http.interface }};
+                {% endif %}
+                {% if configuration_system.services.web_management.http.port is defined %}
+                port {{ configuration_system.services.web_management.http.port }};
+                {% endif %}
+            }
+            {% endif %}
+        }
+        {% endif %}
+    }
+    {% endif %}

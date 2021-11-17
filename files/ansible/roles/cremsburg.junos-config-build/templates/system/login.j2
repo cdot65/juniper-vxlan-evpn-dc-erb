@@ -1,0 +1,93 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# SYSTEM LOGINS                                                                      #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.login is defined %}
+    login {
+        {% if configuration_system.login.retry_options is defined %}
+        retry-options {
+            {% if configuration_system.login.retry_options.tries_before_disconnect is defined %}
+            tries-before-disconnect {{ configuration_system.login.retry_options.tries_before_disconnect }};
+            {% endif %}
+            {% if configuration_system.login.retry_options.backoff_threshold is defined %}
+            backoff-threshold {{ configuration_system.login.retry_options.backoff_threshold }};
+            {% endif %}
+            {% if configuration_system.login.retry_options.backoff_factor is defined %}
+            backoff-factor {{ configuration_system.login.retry_options.backoff_factor }};
+            {% endif %}
+        }
+        {% endif %}
+        {% if configuration_system.login.class is defined %}
+        {% if configuration_system.login.class is not mapping and configuration_system.login.class is not string %}
+        {% for each in configuration_system.login.class %}
+        class {{ each.name }} {
+            {% if each.idle_timeout is defined %}
+            idle-timeout {{ each.idle_timeout }};
+            {% endif %}
+            {% if each.permissions is defined %}
+            permissions {{ each.permissions }};
+            {% endif %}
+        }
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+        {% for each in configuration_system.login.user %}
+        {% if each['@inactive'] is defined %}
+        inactive: user {{ each.name }} {
+        {% else %}
+        user {{ each.name }} {
+        {% endif %}
+            {% if each.full_name is defined %}
+            full-name {{ each.full_name }};
+            {% endif %}
+            {% if each.uid is defined %}
+            uid {{ each.uid }};
+            {% endif %}
+            {% if each.class is defined %}
+            class {{ each.class }};
+            {% endif %}
+            {% if each.authentication is defined %}
+            authentication {
+                {% if each.authentication.encrypted_password is defined %}
+                encrypted-password "{{ each.authentication.encrypted_password }}";
+                {% endif %}
+                {% if each.authentication.ssh_rsa is defined %}
+                ssh-rsa "{{ each.authentication.ssh_rsa.name }}";
+                {% endif %}
+            }
+            {% endif %}
+        }
+        {% endfor %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# mist                                                                              #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if device.mist is defined %}
+        {% if device.mist.login is defined %}
+        user {{ device.mist.login.name }} {
+            full-name {{ device.mist.login.full_name }};
+            {% if device.mist.login.uid is defined %}
+            uid {{ device.mist.login.uid }};
+            {% endif %}
+            {% if device.mist.login.class is defined %}
+            class {{ device.mist.login.class }};
+            {% endif %}
+            {% if device.mist.login.authentication is defined %}
+            authentication {
+                {% if device.mist.login.authentication.encrypted_password is defined %}
+                encrypted-password "{{ device.mist.login.authentication.encrypted_password }}";
+                {% endif %}
+                {% if device.mist.login.authentication.ssh_rsa is defined %}
+                ssh-rsa "{{ device.mist.login.authentication.ssh_rsa.name }}";
+                {% endif %}
+            }
+            {% endif %}
+        }
+        {% endif %}
+        {% endif %}
+        {#- ---------------------------------------------------------------------------------- #}
+        {# login message                                                                       #}
+        {# ---------------------------------------------------------------------------------- -#}
+        {% if configuration_system.login.message is defined %}
+        message "{{ configuration_system.login.message }}";
+        {% endif %}
+    }
+    {% endif %}

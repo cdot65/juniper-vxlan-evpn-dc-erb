@@ -1,0 +1,13 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# radius                                                                              #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.radius_server is defined %}
+    radius-server {
+        {% for each in configuration_system.radius_server %}
+        {{ each.name }} {
+            secret "{{ each.secret }}";
+            source-address "{{ each.source_address }}";
+        }
+        {% endfor %}
+    }
+    {% endif %}

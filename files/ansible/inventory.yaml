@@ -1,0 +1,19 @@
+---
+all:
+  children:
+    spine:
+      hosts:
+        dallas-spine1:
+          ansible_host: "192.168.105.11"
+        dallas-spine2:
+          ansible_host: "192.168.105.12"
+    leaf:
+      hosts:
+        dallas-leaf1:
+          ansible_host: "192.168.105.13"
+        dallas-leaf2:
+          ansible_host: "192.168.105.14"
+        dallas-leaf3:
+          ansible_host: "192.168.105.15"
+        dallas-leaf4:
+          ansible_host: "192.168.105.16"

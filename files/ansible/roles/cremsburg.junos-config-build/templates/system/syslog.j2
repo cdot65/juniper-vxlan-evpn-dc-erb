@@ -1,0 +1,72 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# SYSLOG                                                                              #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.syslog is defined %}
+    syslog {
+        {% if configuration_system.syslog.user is defined %}
+        user {{ configuration_system.syslog.user.name }} {
+            {% if configuration_system.syslog.user.contents is defined %}
+            {{ configuration_system.syslog.user.contents.name }} emergency;
+            {% endif %}
+            {% if configuration_system.syslog.user.match is defined %}
+            match "{{ configuration_system.syslog.user.match }}";
+            {% endif %}
+        }
+        {% endif %}
+        {% if configuration_system.syslog.host is defined %}
+        {% for each in configuration_system.syslog.host %}
+        host {{ each.name }} {
+            {% if each.match is defined %}
+            match "{{ each.match }}";
+            {% endif %}
+            {% if each.contents.any is defined %}
+            any any;
+            {% endif %}
+            {% if each.contents.info is defined %}
+            any info;
+            {% endif %}
+            {% if each.port is defined %}
+            port {{ each.port }};
+            {% endif %}
+            {% if each.source_address is defined %}
+            source-address {{ each.source_address }};
+            {% endif %}
+            {% if each.structured_data is defined %}
+            structured-data;
+            {% endif %}
+        }
+        {% endfor %}
+        {% endif %}
+        {% if configuration_system.syslog.file is defined %}
+        {% for each in configuration_system.syslog.file %}
+        file {{ each.name }} {
+            {% if each.contents is iterable and each.contents is not mapping %}
+            {% for line in each.contents %}
+            {% if line.notice is defined %}
+            {{ line.name }} notice;
+            {% elif line.info is defined %}
+            {{ line.name }} info;
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            {% if each.contents.any is defined %}
+            {{ each.contents.name }} any;
+            {% endif %}
+            {% if each.contents.info is defined %}
+            {{ each.contents.name }} info;
+            {% endif %}
+            {% if each.archive is defined %}
+            archive files {{ each.archive.files }};
+            {% endif %}
+            {% if each.match is defined %}
+            match "{{ each.match }}";
+            {% endif %}
+            {% if each.structured_data is defined %}
+            structured-data;
+            {% endif %}
+            {% endif %}
+        }
+        {% endfor %}
+        {% endif %}
+    }
+    {% endif %}

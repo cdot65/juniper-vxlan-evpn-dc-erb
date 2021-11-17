@@ -1,0 +1,11 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# root password                                                                       #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.root_authentication is defined %}
+    root-authentication {
+        encrypted-password "{{ configuration_system.root_authentication.encrypted_password }}";
+        {% if configuration_system.root_authentication.ssh_rsa is defined %}
+        ssh-rsa "{{ configuration_system.root_authentication.ssh_rsa.name }}";
+        {% endif %}
+    }
+    {% endif %}

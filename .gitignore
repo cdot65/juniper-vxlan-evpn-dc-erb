@@ -1,0 +1,13 @@
+files/ansible/pb.configuration.mist.exswitch.yml
+files/ansible/pb.netbox.retrieve.info.yml
+files/ansible/pb.awx.test.environmentals.yml
+files/ansible/pb.configuration.network.yml
+files/ansible/pb.configuration.golden.diff.yml
+files/ansible/config/temporary/
+venv/
+files/tmp/*
+files/ansible/group_vars/all/cremsburg
+files/ansible/group_vars/all/cremsburg.pub
+files/ansible/group_vars/all/netbox
+files/ansible/group_vars/all/netbox.pub
+files/ansible/roles/juniper.junos

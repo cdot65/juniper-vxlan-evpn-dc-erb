@@ -1,0 +1,26 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# scripts                                                                             #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.scripts is defined %}
+    scripts {
+        {% if configuration_system.scripts.op is defined %}
+        op {
+            {% if configuration_system.scripts.op.file is defined %}
+            {% for each in configuration_system.scripts.op.file %}
+            {% if each.checksum is defined %}
+            file {{ each.name }} {
+                checksum sha-256 {{ each.checksum.sha_256 }};
+            }
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        }
+        {% endif %}
+        {% if configuration_system.scripts.language is defined %}
+        language {{ configuration_system.scripts.language }};
+        {% endif %}
+        {% if configuration_system.scripts.synchronize is defined %}
+        synchronize;
+        {% endif %}
+    }
+    {% endif %}

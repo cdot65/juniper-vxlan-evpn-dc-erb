@@ -1,0 +1,40 @@
+    {#- ---------------------------------------------------------------------------------- #}
+    {# accounting                                                                          #}
+    {# ---------------------------------------------------------------------------------- -#}
+    {% if configuration_system.accounting is defined %}
+    {% if configuration_system.accounting['@inactive'] is defined %}
+    inactive: accounting {
+    {% else %}
+    accounting {
+    {% endif %}
+        {% if configuration_system.accounting.events is defined %}
+        {% if configuration_system.accounting.events is not mapping and configuration_system.accounting.events is not string %}
+        events [ {{ configuration_system.accounting.events|join(' ')}} ];
+        {% else %}
+        events {{ configuration_system.accounting.events }};
+        {% endif %}
+        {% endif %}
+        {% if configuration_system.accounting.destination is defined %}
+        {% if configuration_system.accounting.destination['@inactive'] is defined %}
+        inactive: destination {
+        {% else %}
+        destination {
+        {% endif %}
+            {% if configuration_system.accounting.destination.tacplus is defined %}
+            tacplus {
+                server {
+                    {% if configuration_system.accounting.destination.tacplus.server is not mapping and configuration_system.accounting.destination.tacplus.server is not string %}
+                    {% for each in configuration_system.accounting.destination.tacplus.server %}
+                    {{ each.name }} {
+                        timeout {{ each.timeout }};
+                        source-address {{ each.source_address }};
+                    }
+                    {% endfor %}
+                    {% endif %}
+                }
+            }
+            {% endif %}
+        }
+        {% endif %}
+    }
+    {% endif %}

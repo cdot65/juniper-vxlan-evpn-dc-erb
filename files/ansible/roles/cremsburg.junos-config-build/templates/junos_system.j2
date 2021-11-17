@@ -1,0 +1,47 @@
+#jinja2: lstrip_blocks: "True (or False)", trim_blocks: "True (or False)"
+{#- ---------------------------------------------------------------------------------- #}
+{# Junos Configuration stanza for "system"                                             #}
+{# ---------------------------------------------------------------------------------- -#}
+{% if configuration_system is defined %}
+system {
+
+{% include './system/commit.j2' %}
+
+{% include './system/hostname.j2' %}
+
+{% include './system/root-authentication.j2' %}
+
+{% include './system/login.j2' %}
+
+{% include './system/services.j2' %}
+
+{% include './system/snapshot.j2' %}
+
+{% include './system/domains.j2' %}
+
+{% include './system/arp.j2' %}
+
+{% include './system/management-instance.j2' %}
+
+{% include './system/auth-order.j2' %}
+
+{% include './system/radius.j2' %}
+
+{% include './system/accounting.j2' %}
+
+{% include './system/scripts.j2' %}
+
+{% include './system/timezone.j2' %}
+
+{% include './system/name-server.j2' %}
+
+{% include './system/syslog.j2' %}
+
+{% include './system/processes.j2' %}
+
+{% include './system/phone-home.j2' %}
+
+{% include './system/extensions.j2' %}
+
+}
+{% endif %}
